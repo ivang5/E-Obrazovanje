@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12 col-md-4 offset-md-1 align-self-center">
+            <img *ngIf="isAdministrator()" class="profile-img" src="assets/img/admin.png" alt="Administrator">
+            <img *ngIf="isNastavnik()" class="profile-img" src="assets/img/nastavnik.png" alt="Nastavnik">
+            <img *ngIf="isStudent()" class="profile-img" src="assets/img/student.png" alt="Student">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card card-custom">
+                <div class="card-header text-white bg-dark profile-header">
+                    Pregled profila
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Korisničko ime: {{ korisnik.korisnickoIme }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Uloga: {{ ulogaFormatted }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Ime: {{ korisnik.ime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Prezime: {{ korisnik.prezime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Email: {{ korisnik.email }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Adresa: {{ korisnik.adresa }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Grad: {{ korisnik.grad }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Broj telefona: {{ korisnik.brojTelefona }}
+                        </li>
+                        <li *ngIf="isNastavnik()"
+                            class="list-group-item mt-2 text-white bg-secondary rounded text-lowercase">
+                            Tip: {{ korisnik.uloga }}
+                        </li>
+                        <li *ngIf="isNastavnik()" class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Katedra: {{ korisnik.katedra }}
+                        </li>
+                        <li *ngIf="isStudent()" class="list-group-item mt-2 text-white bg-secondary rounded">
+                            JMBG: {{ korisnik.jmbg }}
+                        </li>
+                        <li *ngIf="isStudent()" class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Smer: {{ korisnik.smer }}
+                        </li>
+                        <li *ngIf="isStudent()" class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Godina studija: {{ korisnik.godinaStudija }}
+                        </li>
+                        <li *ngIf="isStudent()" class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Račun: {{ korisnik.racun }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer text-white bg-dark">
+                    <button class="btn btn-primary mb-2 mt-1" type="button" (click)="openIzmenaModal()"><i
+                            class="bi bi-pencil"></i> Izmeni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena informacija</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="imeInput" name="ime" [(ngModel)]="korisnik.ime" />
+                        <label class="text-black" for="imeInput">Ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="prezimeInput" name="prezime"
+                            [(ngModel)]="korisnik.prezime" />
+                        <label class="text-black" for="prezimeInput">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="korImeInput" name="korisnickoIme"
+                            [(ngModel)]="korisnik.korisnickoIme" />
+                        <label class="text-black" for="korImeInput">Korisničko ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" id="lozinkaInput" name="lozinka"
+                            [(ngModel)]="korisnik.lozinka" />
+                        <label class="text-black" for="lozinkaInput">Lozinka</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" id="emailInput" name="email"
+                            [(ngModel)]="korisnik.email" />
+                        <label class="text-black" for="emailInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="adresaInput" name="adresa"
+                            [(ngModel)]="korisnik.adresa" />
+                        <label class="text-black" for="adresaInput">Adresa</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="gradInput" name="grad"
+                            [(ngModel)]="korisnik.grad" />
+                        <label class="text-black" for="gradInput">Grad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="brojTelefonaInput" name="brojTelefona"
+                            [(ngModel)]="korisnik.brojTelefona" />
+                        <label class="text-black" for="brojTelefonaInput">Broj telefona</label>
+                    </div>
+                    <div *ngIf="isNastavnik()" class="form-floating mb-2">
+                        <input type="text" class="form-control" id="katedraInput" name="Katedra"
+                            [(ngModel)]="korisnik.katedra" />
+                        <label class="text-black" for="katedraInput">Katedra</label>
+                    </div>
+                    <div *ngIf="isNastavnik()" class="form-floating mb-2">
+                        <select class="form-select" aria-label="Uloga select" id="ulogaInput"
+                            [(ngModel)]="korisnik.uloga">
+                            <option value="PROFESOR">
+                                Profesor
+                            </option>
+                            <option value="ASISTENT">
+                                Asistent
+                            </option>
+                            <option value="DEMONSTRATOR">
+                                Demonstrator
+                            </option>
+                        </select>
+                        <label class="text-black" for="ulogaInput">Uloga</label>
+                    </div>
+                    <div *ngIf="isStudent()" class="form-floating mb-2">
+                        <input type="text" class="form-control" id="jmbgInput" name="jmbg"
+                            [(ngModel)]="korisnik.jmbg" />
+                        <label class="text-black" for="jmbgInput">JMBG</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniKorisnika()">
+                        <i class="bi bi-person-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

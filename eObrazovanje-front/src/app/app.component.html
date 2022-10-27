@@ -1,0 +1,5 @@
+<div class="d-flex flex-column min-vh-100 custom-wrapper">
+  <app-navbar *ngIf="!hasRoute('/login')"></app-navbar>
+  <router-outlet></router-outlet>
+  <app-footer *ngIf="!hasRoute('/login')"></app-footer>
+</div>

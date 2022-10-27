@@ -1,0 +1,125 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12 col-md-4 offset-md-1 align-self-center">
+            <img class="profile-img" src="assets/img/admin.png" alt="Admin">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card card-custom">
+                <div class="card-header text-white bg-dark profile-header">
+                    Pregled profila
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Korisničko ime: {{ administrator.korisnickoIme }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Uloga: Administrator
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Ime: {{ administrator.ime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Prezime: {{ administrator.prezime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Email: {{ administrator.email }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Adresa: {{ administrator.adresa }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Grad: {{ administrator.grad }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Broj telefona: {{ administrator.brojTelefona }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer text-white bg-dark">
+                    <button class="btn btn-primary mb-2 mt-1" type="button" (click)="openIzmenaModal()"><i
+                            class="bi bi-pencil"></i> Izmeni</button>
+                    <button class="btn btn-danger mb-2 mt-1 mx-3" type="button" (click)="openBrisanjeModal()"><i
+                            class="bi bi-trash3"></i> Obrisi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena administratora</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="imeInput" name="ime"
+                            [(ngModel)]="administrator.ime" />
+                        <label class="text-black" for="imeInput">Ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="prezimeInput" name="prezime"
+                            [(ngModel)]="administrator.prezime" />
+                        <label class="text-black" for="prezimeInput">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="korImeInput" name="korisnickoIme"
+                            [(ngModel)]="administrator.korisnickoIme" />
+                        <label class="text-black" for="korImeInput">Korisničko ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" id="lozinkaInput" name="lozinka"
+                            [(ngModel)]="administrator.lozinka" />
+                        <label class="text-black" for="lozinkaInput">Lozinka</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" id="emailInput" name="email"
+                            [(ngModel)]="administrator.email" />
+                        <label class="text-black" for="emailInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="adresaInput" name="adresa"
+                            [(ngModel)]="administrator.adresa" />
+                        <label class="text-black" for="adresaInput">Adresa</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="gradInput" name="grad"
+                            [(ngModel)]="administrator.grad" />
+                        <label class="text-black" for="gradInput">Grad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="brojTelefonaInput" name="brojTelefona"
+                            [(ngModel)]="administrator.brojTelefona" />
+                        <label class="text-black" for="brojTelefonaInput">Broj telefona</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniAdministratora()">
+                        <i class="bi bi-person-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje administratora</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete administratora?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiAdministratora()"><i
+                            class="bi bi-person-x"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

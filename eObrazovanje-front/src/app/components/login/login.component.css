@@ -1,0 +1,11 @@
+.gradient-custom {
+  background: linear-gradient(to right, #0066b2, #7cb9e8);
+}
+
+.login-link {
+  transition: color 0.2s;
+}
+
+.login-link:hover {
+  color: #e0ffff !important;
+}

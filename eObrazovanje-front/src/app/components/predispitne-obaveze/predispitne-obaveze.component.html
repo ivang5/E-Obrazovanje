@@ -1,0 +1,198 @@
+<div class="container">
+    <h3 *ngIf="isStudent()" class="py-2 text-light">Neprijavljene predispitne obaveze:</h3>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Predmet</th>
+                <th>Tip</th>
+                <th>Sala</th>
+                <th>Datum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let predispitnaObaveza of predObaveze">
+                <td *ngIf="predispitnaObaveza.predmet != null" class="pt-3">{{ predispitnaObaveza.predmet.naziv }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.tipPredispitneObaveze }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.sala }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.datum }}</td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-primary" type="button"
+                        (click)="openIzmenaModal(predispitnaObaveza.id!)">
+                        <i class="bi bi-pencil"></i></button></td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-danger" type="button"
+                        (click)="openBrisanjeModal(predispitnaObaveza.id!)">
+                        <i class="bi bi-trash3"></i></button></td>
+                <td *ngIf="isStudent()"><button class="btn btn-success" type="button"
+                        (click)="openPrijavaModal(predispitnaObaveza.id!)">
+                        <i class="bi bi-plus-circle"></i> Prijavi</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3 *ngIf="isStudent()" class="pt-5 pb-2 text-light">Prijavljene predispitne obaveze:</h3>
+    <table *ngIf="isStudent()" class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Predmet</th>
+                <th>Tip</th>
+                <th>Sala</th>
+                <th>Datum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let predispitnaObaveza of prijavljenePredObaveze">
+                <td *ngIf="predispitnaObaveza.predmet != null" class="pt-3">{{ predispitnaObaveza.predmet.naziv }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.tipPredispitneObaveze }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.sala }}</td>
+                <td class="pt-3">{{ predispitnaObaveza.datum }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button *ngIf="isAdministrator()" class="btn btn-success" (click)="openDodavanjeModal()"><i
+            class="bi bi-calendar-plus"></i> Dodaj
+        predispitnu obavezu</button>
+    <div class="modal fade" id="dodavanjeModal" tabindex="-1" aria-labelledby="dodavanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dodavanje predispitne obaveze</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Predmet select" id="predmetInput"
+                            [(ngModel)]="selektovaniPredmetId">
+                            <option *ngFor="let predmet of predmeti; let i = index" [value]="predmeti[i].id">
+                                {{ predmeti[i].naziv }}
+                            </option>
+                        </select>
+                        <label class="text-black" for="predmetInput">Predmet</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Tip predispitne obaveze" id="tipInput"
+                            [(ngModel)]="selektovanaPredObaveza.tipPredispitneObaveze">
+                            <option value="ISPIT">
+                                Ispit
+                            </option>
+                            <option value="KOLOKVIJUM">
+                                Kolokvijum
+                            </option>
+                            <option value="PROJEKAT">
+                                Projekat
+                            </option>
+                        </select>
+                        <label class="text-black" for="tipInput">Tip</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="salaInput" name="sala" placeholder="Sala"
+                            [(ngModel)]="selektovanaPredObaveza.sala" />
+                        <label class="text-black" for="salaInput">Sala</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" id="datumInput" name="datum" placeholder="Datum"
+                            [(ngModel)]="selektovanaPredObaveza.datum" />
+                        <label class="text-black" for="datumInput">Datum</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="dodajPredObavezu()">
+                        <i class="bi bi-calendar-plus"></i> Dodaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        (click)="ucitajPredObaveze()">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena predispitne obaveze</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Predmet select" id="predmetInput"
+                            [(ngModel)]="selektovaniPredmetId">
+                            <option *ngFor="let predmet of predmeti" value={{ predmet.id }}>
+                                {{ predmet.naziv }}
+                            </option>
+                        </select>
+                        <label class="text-black" for="predmetInput">Predmet</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Tip predispitne obaveze" id="tipInput"
+                            [(ngModel)]="selektovanaPredObaveza.tipPredispitneObaveze">
+                            <option value="ISPIT">
+                                Ispit
+                            </option>
+                            <option value="KOLOKVIJUM">
+                                Kolokvijum
+                            </option>
+                            <option value="PROJEKAT">
+                                Projekat
+                            </option>
+                        </select>
+                        <label class="text-black" for="tipInput">Tip</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="salaInput" name="sala" placeholder="Sala"
+                            [(ngModel)]="selektovanaPredObaveza.sala" />
+                        <label class="text-black" for="salaInput">Sala</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" id="datumInput" name="datum" placeholder="Datum"
+                            [(ngModel)]="selektovanaPredObaveza.datum" />
+                        <label class="text-black" for="datumInput">Datum</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniPredObavezu()">
+                        <i class="bi bi-calendar-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        (click)="ucitajPredObaveze()">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje predispitne obaveze</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete predispitnu obavezu?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiPredObavezu()"><i
+                            class="bi bi-calendar-x"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        (click)="ucitajPredObaveze()">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="prijavaModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Prijava predispitne obaveze</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da prijavite izabranu predispitnu obavezu?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="prijaviPredObavezu()"><i
+                            class="bi bi-check-circle"></i>
+                        Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class=" bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

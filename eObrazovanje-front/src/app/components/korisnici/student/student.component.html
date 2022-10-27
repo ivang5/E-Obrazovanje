@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="row my-5">
+        <div class="col-12 col-md-4 offset-md-1 align-self-center">
+            <img class="profile-img" src="assets/img/student.png" alt="Student">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card card-custom">
+                <div class="card-header text-white bg-dark profile-header">
+                    Pregled profila
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Korisničko ime: {{ student.korisnickoIme }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Uloga: student
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Ime: {{ student.ime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Prezime: {{ student.prezime }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Email: {{ student.email }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Adresa: {{ student.adresa }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Grad: {{ student.grad }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Broj telefona: {{ student.brojTelefona }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            JMBG: {{ student.jmbg }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Smer: {{ student.smer }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Godina studija: {{ student.godinaStudija }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Racun: {{ student.racun }}
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="isAdministrator()" class="card-footer text-white bg-dark">
+                    <button class="btn btn-primary mb-2 mt-1" type="button" (click)="openIzmenaModal()"><i
+                            class="bi bi-pencil"></i> Izmeni</button>
+                    <button class="btn btn-danger mb-2 mt-1 mx-3" type="button" (click)="openBrisanjeModal()"><i
+                            class="bi bi-trash3"></i> Obrisi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena studenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="imeInput" name="ime" [(ngModel)]="student.ime" />
+                        <label class="text-black" for="imeInput">Ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="prezimeInput" name="prezime"
+                            [(ngModel)]="student.prezime" />
+                        <label class="text-black" for="prezimeInput">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="korImeInput" name="korisnickoIme"
+                            [(ngModel)]="student.korisnickoIme" />
+                        <label class="text-black" for="korImeInput">Korisničko ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" id="lozinkaInput" name="lozinka"
+                            [(ngModel)]="student.lozinka" />
+                        <label class="text-black" for="lozinkaInput">Lozinka</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" id="emailInput" name="email"
+                            [(ngModel)]="student.email" />
+                        <label class="text-black" for="emailInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="adresaInput" name="adresa"
+                            [(ngModel)]="student.adresa" />
+                        <label class="text-black" for="adresaInput">Adresa</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="gradInput" name="grad" [(ngModel)]="student.grad" />
+                        <label class="text-black" for="gradInput">Grad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="brojTelefonaInput" name="brojTelefona"
+                            [(ngModel)]="student.brojTelefona" />
+                        <label class="text-black" for="brojTelefonaInput">Broj telefona</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="jmbgInput" name="jmbg" [(ngModel)]="student.jmbg" />
+                        <label class="text-black" for="jmbgInput">JMBG</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="smerInput" name="smer" [(ngModel)]="student.smer" />
+                        <label class="text-black" for="smerInput">Smer</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control" id="godInput" name="god"
+                            [(ngModel)]="student.godinaStudija" />
+                        <label class="text-black" for="godInput">Godina studija</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniStudenta()">
+                        <i class="bi bi-person-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje studenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete studenta?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiStudenta()"><i
+                            class="bi bi-person-x"></i>
+                        Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

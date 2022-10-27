@@ -1,0 +1,288 @@
+<div class="container">
+    <div class="my-5">
+        <div class="col-12 col-md-10 offset-md-1 align-self-center">
+            <div *ngIf="isAdministrator() || isNastavnik()" class="card-custom">
+                <div class="card-header text-white bg-dark profile-header fw-bold">
+                    Pregled predmeta
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Naziv: {{ predmet.naziv }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            ESPB: {{ predmet.espb }}
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="isAdministrator()" class="card-footer text-white bg-dark">
+                    <button class="btn btn-primary mb-2 mt-1" type="button" (click)="openIzmenaModal()"><i
+                            class="bi bi-pencil"></i> Izmeni</button>
+                    <button class="btn btn-danger mb-2 mt-1 mx-3" type="button" (click)="openBrisanjeModal()"><i
+                            class="bi bi-trash3"></i> Obrisi</button>
+                </div>
+            </div>
+            <div class="card-custom mt-4">
+                <div class="card-header text-white bg-dark profile-header fw-bold">
+                    Predavači
+                </div>
+                <div class="card-body bg-dark bg-gradient-light">
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nastavnik</th>
+                                <th>Katedra</th>
+                                <th>Uloga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let nastavnik of nastavnici">
+                                <td *ngIf="!isStudent()" class="pt-3"><a [routerLink]="['/nastavnici', nastavnik.id]">{{
+                                        nastavnik.ime }} {{ nastavnik.prezime }}</a></td>
+                                <td *ngIf="isStudent()" class="pt-3">{{ nastavnik.ime }} {{ nastavnik.prezime }}</td>
+                                <td class="pt-3">{{ nastavnik.katedra }}</td>
+                                <td class="pt-3">{{ nastavnik.uloga }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div *ngIf="!isStudent()" class="card-custom mt-4">
+                <div class="card-header text-white bg-dark profile-header fw-bold">
+                    Pohađanja predmeta
+                </div>
+                <div class="card-body bg-gradient-light">
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Početak</th>
+                                <th>Kraj</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pohadjanje of pohadjanjaPredmeta">
+                                <td class="pt-3"><a [routerLink]="['/pohadjanjePredmeta', pohadjanje.id]">{{
+                                        pohadjanje.id}}</a></td>
+                                <td class="pt-3">{{ pohadjanje.startDate.split("T")[0] }}</td>
+                                <td class="pt-3">{{ pohadjanje.endDate.split("T")[0] }}</td>
+                                <td><button class="btn btn-primary" type="button"
+                                        (click)="openIzmenaPohadjanjaModal(pohadjanje.id!)">
+                                        <i class="bi bi-pencil"></i></button></td>
+                                <td *ngIf="isAdministrator()"><button class="btn btn-danger" type="button"
+                                        (click)="openBrisanjePohadjanjaModal(pohadjanje.id!)">
+                                        <i class="bi bi-trash3"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button class="btn btn-success" (click)="openDodavanjePohadjanjaModal()"><i
+                            class="bi bi-calendar-plus"></i> Dodaj pohađanje predmeta</button>
+                </div>
+            </div>
+            <div *ngIf="isStudent()" class="card-custom mt-4">
+                <div class="card-header text-white bg-dark profile-header">
+                    Pregled predmeta
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Naziv: {{ predmet.naziv }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            ESPB: {{ predmet.espb }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Početak : {{ pohadjanjaPredmeta[0].startDate.split("T")[0] }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Kraj: {{ pohadjanjaPredmeta[0].endDate.split("T")[0] }}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-custom mt-4">
+                    <div class="card-header text-white bg-dark profile-header">
+                        Spisak studenata
+                    </div>
+                    <div class="card-body bg-dark bg-gradient-light">
+                        <table class="table table-dark table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Smer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let student of studenti">
+                                    <td class="pt-3">{{ student.ime }} {{ student.prezime }}</td>
+                                    <td class="pt-3">{{ student.smer }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="dodavanjePohadjanjaModal" tabindex="-1"
+                aria-labelledby="dodavanjePohadjanjaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Dodavanje pohađanja predmeta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control" id="startDateInput" name="pocetak"
+                                    placeholder="Pocetak" [(ngModel)]="selektovanoPohadjanje.startDate" />
+                                <label class="text-black" for="startDateInput">Pocetak</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control" id="endDateInput" name="kraj" placeholder="Kraj"
+                                    [(ngModel)]="selektovanoPohadjanje.endDate" />
+                                <label class="text-black" for="endDateInput">Kraj</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <form [formGroup]="dropDownForm">
+                                    <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="studentiZaPrikaz"
+                                        [placeholder]="'Dodajte studente'" formControlName="items"
+                                        (onSelect)="onSelectItem($event)" (onDeSelect)="onDeSelectItem($event)"
+                                        (onSelectAll)="onSelectItems()" (onDeSelectAll)="onDeSelectItems()"
+                                        [(ngModel)]="selektovanoPohadjanje.studenti">
+                                    </ng-multiselect-dropdown>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success" (click)="dodajPohadjanje()">
+                                <i class="bi bi-calendar-plus"></i> Dodaj</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Izmena predmeta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-2">
+                                <input type="text" class="form-control" id="nazivInput" name="naziv"
+                                    [(ngModel)]="predmet.naziv" />
+                                <label class="text-black" for="nazivInput">Naziv</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="number" class="form-control" id="espbInput" name="espb"
+                                    [(ngModel)]="predmet.espb" />
+                                <label class="text-black" for="espbInput">ESPB</label>
+                            </div>
+                            <!-- <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="nastavniciZaPrikaz"
+                                [placeholder]="'Dodajte predavace'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" [(ngModel)]="predmet.predavaci">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div> -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" (click)="izmeniPredmet()">
+                                <i class="bi bi-journal-check"></i> Sačuvaj</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="izmenaPohadjanjaModal" tabindex="-1"
+                aria-labelledby="izmenaPohadjanjaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Izmena pohađanja predmeta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control" id="startDateInput" name="pocetak"
+                                    placeholder="Pocetak" [(ngModel)]="selektovanoPohadjanje.startDate" />
+                                <label class="text-black" for="startDateInput">Pocetak</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <input type="date" class="form-control" id="endDateInput" name="kraj" placeholder="Kraj"
+                                    [(ngModel)]="selektovanoPohadjanje.endDate" />
+                                <label class="text-black" for="endDateInput">Kraj</label>
+                            </div>
+                            <div class="form-floating mb-2">
+                                <form [formGroup]="dropDownForm">
+                                    <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="studentiZaPrikaz"
+                                        [placeholder]="'Dodajte studente'" formControlName="items"
+                                        (onSelect)="onSelectItem($event)" (onDeSelect)="onDeSelectItem($event)"
+                                        (onSelectAll)="onSelectItems()" (onDeSelectAll)="onDeSelectItems()"
+                                        [(ngModel)]="selektovanoPohadjanje.studenti">
+                                    </ng-multiselect-dropdown>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" (click)="izmeniPohadjanje()">
+                                <i class="bi bi-calendar-check"></i> Sačuvaj</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="brisanjeModalLabel">Brisanje predmeta</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Da li ste sigurni da želite da obrišete predmet?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="obrisiPredmet()"><i
+                                    class="bi bi-journal-x"></i>
+                                Potvrdi</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="brisanjePohadjanjaModal" tabindex="-1"
+                aria-labelledby="brisanjePohadjanjaModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="brisanjePohadjanjaModalLabel">Brisanje pohađanja</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Da li ste sigurni da želite da obrišete pohađanje?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" (click)="obrisiPohadjanje()"><i
+                                    class="bi bi-calendar-x"></i>
+                                Potvrdi</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Odustani</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

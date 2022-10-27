@@ -1,0 +1,196 @@
+<div class="container">
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Naziv dokumenta</th>
+                <th>Tip dokumenta</th>
+                <th>Student</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let dokument of dokumenti">
+                <td class="pt-3"><a [routerLink]="['/dokumenti', dokument.id]">{{ dokument.nazivDokumenta }}</a></td>
+                <td class="pt-3">{{ dokument.tipDokumenta }}</td>
+                <td class="pt-3">{{ dokument.student.id}} - {{ dokument.student.ime}} {{ dokument.student.prezime}}</td>
+
+                <td *ngIf="isAdministrator()"><button class="btn btn-primary" type="button"
+                        (click)="openIzmenaModal(dokument.id!)">
+                        <i class="bi bi-pencil"></i></button></td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-danger" type="button"
+                        (click)="openBrisanjeModal(dokument.id!)">
+                        <i class="bi bi-trash3"></i></button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button *ngIf="isAdministrator()" class="btn btn-success" (click)="openDodavanjeModal()"><i
+            class="bi bi-file-earmark-plus"></i> Dodaj dokument</button>
+    <div class="modal fade" id="dodavanjeModal" tabindex="-1" aria-labelledby="dodavanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dodavanje dokumenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="nazivInput" name="naziv" placeholder="Naziv"
+                            [(ngModel)]="selektovaniDokument.nazivDokumenta" />
+                        <label class="text-black" for="nazivInput">Naziv</label>
+                    </div>
+                    <!-- <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="tipInput" name="TipDokumenta" placeholder="tipDokumenta"
+                            [(ngModel)]="selektovaniDokument.tipDokumenta"/>
+                        <label class="text-black" for="tipInput">Tip dokumenta</label>
+                    </div> -->
+
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Tip Dokumenta select" id="tipInput"
+                            [(ngModel)]="selektovaniDokument.tipDokumenta">
+                            <option value="OBRAZAC">
+                                Obrazac
+                            </option>
+                            <option value="DIPLOMA">
+                                Diploma
+                            </option>
+
+                        </select>
+                        <label class="text-black" for="tipInput">Tip dokumenta</label>
+                    </div>
+
+
+                    <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="studentiZaPrikaz"
+                                [placeholder]="'Dodajte studente'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" (onDeSelect)="onDeSelectItem()"
+                                [(ngModel)]="selektovaniStudent">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div>
+                    <!-- <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown
+                                [settings]="dropdownSettings"
+                                [data]="nastavnici"
+                                [placeholder]="'Dodajte predavace'"
+                                formControlName="items"
+                            >
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div> -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="dodajDokument()">
+                        <i class="bi bi-file-earmark-plus"></i> Dodaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena dokumenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="nazivDokumentaInput" name="nazivDokumenta"
+                            [(ngModel)]="selektovaniDokument.nazivDokumenta" />
+                        <label class="text-black" for="nazivDokumentaInput">Naziv</label>
+                    </div>
+                    <!-- <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="tipInput" name="tip"
+                            [(ngModel)]="selektovaniDokument.tipDokumenta" />
+                        <label class="text-black" for="tipInput">Tip dokumenta</label>
+                    </div> -->
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Tip dokumenta select" id="tipDokumentaInput"
+                            [(ngModel)]="selektovaniDokument.tipDokumenta">
+                            <option value="OBRAZAC">
+                                Obrazac
+                            </option>
+                            <option value="DIPLOMA">
+                                Diploma
+                            </option>
+
+                        </select>
+                        <label class="text-black" for="tipDokumentaInput">Tip dokumenta</label>
+                    </div>
+
+
+
+                    <!-- <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="studentiZaPrikaz"
+                                [placeholder]="'Izmenite studenta'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" [(ngModel)]="selektovaniStudent">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div> -->
+
+                    <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="studentiZaPrikaz"
+                                [placeholder]="'Dodajte studente'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" (onDeSelect)="onDeSelectItem()"
+                                [(ngModel)]="selektovaniStudent">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniDokument()">
+                        <i class="bi bi-file-earmark-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="ucitajDokumente()">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje dokumenta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete dokument?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiDokument()"><i
+                            class="bi bi-file-earmark-excel"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

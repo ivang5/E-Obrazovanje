@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+    <div class="container-fluid px-lg-5">
+        <a class="navbar-brand" routerLink="/">
+            <i class="bi bi-journal-code"></i>
+            E-Obrazovanje
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/predmeti">Predmeti</a>
+                </li>
+                <li *ngIf="hasRole('ROLE_ADMINISTRATOR') || hasRole('ROLE_STUDENT')" class="nav-item">
+                    <a class="nav-link" routerLink="/dokumenti">Dokumenti</a>
+                </li>
+                <li *ngIf="hasRole('ROLE_ADMINISTRATOR') || hasRole('ROLE_STUDENT')" class="nav-item">
+                    <a class="nav-link" routerLink="/uplate">Uplate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/predispitne-obaveze">Predispitne obaveze</a>
+                </li>
+                <li *ngIf="!hasRole('ROLE_STUDENT')" class="nav-item">
+                    <a class="nav-link" routerLink="/prijave">Prijave</a>
+                </li>
+                <li *ngIf="hasRole('ROLE_STUDENT')" class="nav-item">
+                    <a class="nav-link" routerLink="/rezultati">Rezultati</a>
+                </li>
+                <li *ngIf="hasRole('ROLE_ADMINISTRATOR') || hasRole('ROLE_NASTAVNIK')" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="korisniciMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleKorisniciDropdown()">
+                        Korisnici
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="korisniciMenuLink">
+                        <li *ngIf="hasRole('ROLE_ADMINISTRATOR')"><a class="dropdown-item"
+                                routerLink="/administratori">Administratori</a></li>
+                        <li><a class="dropdown-item" routerLink="/nastavnici">Nastavnici</a></li>
+                        <li><a class="dropdown-item" routerLink="/studenti">Studenti</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-capitalize" href="#" id="profilMenuLink" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleProfilDropdown()">
+                        <i class="bi bi-person"></i>
+                        {{ korisnickoIme }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="profilMenuLink">
+                        <li><a class="dropdown-item" routerLink="/">Profil</a></li>
+                        <li><a class="dropdown-item cursor-pointer" (click)="logout()">Odjavi se</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

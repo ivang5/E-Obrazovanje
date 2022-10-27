@@ -1,0 +1,119 @@
+<div class="container">
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Naziv</th>
+                <th>ESPB</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let predmet of predmeti">
+                <td class="pt-3"><a [routerLink]="['/predmeti/', predmet.id]">{{ predmet.naziv }}</a></td>
+                <td class="pt-3">{{ predmet.espb }}</td>
+
+                <td *ngIf="isAdministrator()"><button class="btn btn-primary" type="button"
+                        (click)="openIzmenaModal(predmet.id!)">
+                        <i class="bi bi-pencil"></i></button></td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-danger" type="button"
+                        (click)="openBrisanjeModal(predmet.id!)">
+                        <i class="bi bi-trash3"></i></button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button *ngIf="isAdministrator()" class="btn btn-success mb-5" (click)="openDodavanjeModal()"><i
+            class="bi bi-journal-plus"></i> Dodaj predmet</button>
+    <div class="modal fade" id="dodavanjeModal" tabindex="-1" aria-labelledby="dodavanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dodavanje predmeta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="nazivInput" name="naziv" placeholder="Naziv"
+                            [(ngModel)]="selektovaniPredmet.naziv" />
+                        <label class="text-black" for="nazivInput">Naziv</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="espbInput" name="espb" placeholder="ESPB"
+                            [(ngModel)]="selektovaniPredmet.espb" />
+                        <label class="text-black" for="espbInput">ESPB</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="nastavniciZaPrikaz"
+                                [placeholder]="'Dodajte predavace'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" (onDeSelect)="onDeSelectItem($event)"
+                                (onSelectAll)="onSelectItems()" (onDeSelectAll)="onDeSelectItems()"
+                                [(ngModel)]="selektovaniPredmet.predavaci">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="dodajPredmet()">
+                        <i class="bi bi-journal-plus"></i> Dodaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena predmeta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="nazivInput" name="naziv"
+                            [(ngModel)]="selektovaniPredmet.naziv" />
+                        <label class="text-black" for="nazivInput">Naziv</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="number" class="form-control" id="espbInput" name="espb"
+                            [(ngModel)]="selektovaniPredmet.espb" />
+                        <label class="text-black" for="espbInput">ESPB</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <form [formGroup]="dropDownForm">
+                            <ng-multiselect-dropdown [settings]="dropdownSettings" [data]="nastavniciZaPrikaz"
+                                [placeholder]="'Dodajte predavace'" formControlName="items"
+                                (onSelect)="onSelectItem($event)" [(ngModel)]="selektovaniPredmet.predavaci">
+                            </ng-multiselect-dropdown>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniPredmet()">
+                        <i class="bi bi-journal-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje predemeta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete predmet?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiPredmet()"><i
+                            class="bi bi-journal-x"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

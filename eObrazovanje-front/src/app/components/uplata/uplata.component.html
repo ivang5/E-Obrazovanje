@@ -1,0 +1,98 @@
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12 col-md-4 offset-md-1 align-self-center">
+            <img class="profile-img" src="assets/img/Doggo.png">
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card card-custom">
+                <div class="card-header text-white bg-dark profile-header">
+                    Pregled uplate
+                </div>
+                <div class="card-body bg-dark bg-gradient">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            ID: {{ uplata.id }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Svrha: {{ uplata.svrha }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Iznos: {{ uplata.iznos }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Datum: {{ uplata.datum }}
+                        </li>
+                        <li class="list-group-item mt-2 text-white bg-secondary rounded">
+                            Student: {{ uplata.student.korisnickoIme }}
+                        </li>
+                        
+                    </ul>
+                </div>
+                <!-- <div class="card-footer text-white bg-dark">
+                    <button class="btn btn-primary mb-2 mt-1" type="button" (click)="openIzmenaModal()"><i
+                            class="bi bi-pencil"></i> Izmeni</button>
+                    <button class="btn btn-danger mb-2 mt-1 mx-3" type="button" (click)="openBrisanjeModal()"><i
+                            class="bi bi-trash3"></i> Obrisi</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isAdministrator()" class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena uplate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="svrhaInput" name="svrha"
+                            [(ngModel)]="uplata.svrha" />
+                        <label class="text-black" for="svrhaInput">Svrha uplate</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="number" min="200" class="form-control" id="iznosInput" name="iznos"
+                            [(ngModel)]="uplata.iznos" />
+                        <label class="text-black" for="iznosInput">Iznos</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="date" class="form-control" id="datumInput" name="datum"
+                            [(ngModel)]="uplata.datum" />
+                        <label class="text-black" for="datumInput">Datum</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="studentInput" name="student"
+                            [(ngModel)]="uplata.student" />
+                        <label class="text-black" for="studentInput">Student</label>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniUplatu()">
+                        <i class="bi bi-person-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje uplate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete uplatu?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiUplatu()"><i
+                            class="bi bi-person-x"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="ucitajUplatu()">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

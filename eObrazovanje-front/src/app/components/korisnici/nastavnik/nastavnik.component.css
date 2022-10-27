@@ -1,0 +1,17 @@
+.profile-img {
+  width: 100%;
+  max-width: 21rem;
+  height: auto;
+  padding-bottom: 2rem;
+}
+
+.profile-header {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.card-custom {
+  max-width: 36rem;
+  margin-bottom: 2rem;
+  border: none;
+}

@@ -1,0 +1,213 @@
+<div class="container">
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Korisničko ime</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Email</th>
+                <th>Adresa</th>
+                <th>Telefon</th>
+                <th>Katedra</th>
+                <th>Uloga</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let nastavnik of nastavnici">
+                <td class="pt-3"><a [routerLink]="['/nastavnici', nastavnik.korisnickoIme]">{{ nastavnik.korisnickoIme
+                        }}</a></td>
+                <td class="pt-3">{{ nastavnik.ime }}</td>
+                <td class="pt-3">{{ nastavnik.prezime }}</td>
+                <td class="pt-3">{{ nastavnik.email }}</td>
+                <td class="pt-3">{{ nastavnik.adresa }}, {{nastavnik.grad}}</td>
+                <td class="pt-3">{{ nastavnik.brojTelefona }}</td>
+                <td class="pt-3">{{ nastavnik.katedra }}</td>
+                <td class="pt-3">{{ nastavnik.uloga }}</td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-primary" type="button"
+                        (click)="openIzmenaModal(nastavnik.id!)">
+                        <i class="bi bi-pencil"></i></button></td>
+                <td *ngIf="isAdministrator()"><button class="btn btn-danger" type="button"
+                        (click)="openBrisanjeModal(nastavnik.id!)">
+                        <i class="bi bi-trash3"></i></button></td>
+            </tr>
+        </tbody>
+    </table>
+    <button *ngIf="isAdministrator()" class="btn btn-success" (click)="openDodavanjeModal()"><i
+            class="bi bi-person-plus"></i> Dodaj
+        nastavnika</button>
+    <div class="modal fade" id="dodavanjeModal" tabindex="-1" aria-labelledby="dodavanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dodavanje nastavnika</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="imeInput" name="ime" placeholder="Ime"
+                            [(ngModel)]="selektovaniNastavnik.ime" />
+                        <label class="text-black" for="imeInput">Ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="prezimeInput" name="prezime" placeholder="Prezime"
+                            [(ngModel)]="selektovaniNastavnik.prezime" />
+                        <label class="text-black" for="prezimeInput">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="korImeInput" name="korisnickoIme"
+                            placeholder="Korisnicko ime" [(ngModel)]="selektovaniNastavnik.korisnickoIme" />
+                        <label class="text-black" for="korImeInput">Korisničko ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" id="lozinkaInput" name="lozinka"
+                            placeholder="Lozinka" [(ngModel)]="selektovaniNastavnik.lozinka" />
+                        <label class="text-black" for="lozinkaInput">Lozinka</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="emailInput" name="email" placeholder="Email"
+                            [(ngModel)]="selektovaniNastavnik.email" />
+                        <label class="text-black" for="emailInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="adresaInput" name="adresa" placeholder="Adresa"
+                            [(ngModel)]="selektovaniNastavnik.adresa" />
+                        <label class="text-black" for="adresaInput">Adresa</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="gradInput" name="grad" placeholder="Grad"
+                            [(ngModel)]="selektovaniNastavnik.grad" />
+                        <label class="text-black" for="gradInput">Grad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="brojTelefonaInput" name="brojTelefona"
+                            placeholder="Broj telefona" [(ngModel)]="selektovaniNastavnik.brojTelefona" />
+                        <label class="text-black" for="brojTelefonaInput">Broj telefona</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="katedraInput" name="katedra" placeholder="Katedra"
+                            [(ngModel)]="selektovaniNastavnik.katedra" />
+                        <label class="text-black" for="katedraInput">Katedra</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Uloga select" id="ulogaInput"
+                            [(ngModel)]="selektovaniNastavnik.uloga">
+                            <option value="PROFESOR">
+                                Profesor
+                            </option>
+                            <option value="ASISTENT">
+                                Asistent
+                            </option>
+                            <option value="DEMONSTRATOR">
+                                Demonstrator
+                            </option>
+                        </select>
+                        <label class="text-black" for="ulogaInput">Uloga</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" (click)="dodajNastavnika()">
+                        <i class="bi bi-person-plus"></i> Dodaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="izmenaModal" tabindex="-1" aria-labelledby="izmenaModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Izmena nastavnika</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="imeInput" name="ime"
+                            [(ngModel)]="selektovaniNastavnik.ime" />
+                        <label class="text-black" for="imeInput">Ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="prezimeInput" name="prezime"
+                            [(ngModel)]="selektovaniNastavnik.prezime" />
+                        <label class="text-black" for="prezimeInput">Prezime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="korImeInput" name="korisnickoIme"
+                            [(ngModel)]="selektovaniNastavnik.korisnickoIme" />
+                        <label class="text-black" for="korImeInput">Korisničko ime</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="password" class="form-control" id="lozinkaInput" name="lozinka"
+                            [(ngModel)]="selektovaniNastavnik.lozinka" />
+                        <label class="text-black" for="lozinkaInput">Lozinka</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="email" class="form-control" id="emailInput" name="email"
+                            [(ngModel)]="selektovaniNastavnik.email" />
+                        <label class="text-black" for="emailInput">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="adresaInput" name="adresa"
+                            [(ngModel)]="selektovaniNastavnik.adresa" />
+                        <label class="text-black" for="adresaInput">Adresa</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="gradInput" name="grad"
+                            [(ngModel)]="selektovaniNastavnik.grad" />
+                        <label class="text-black" for="gradInput">Grad</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="brojTelefonaInput" name="brojTelefona"
+                            [(ngModel)]="selektovaniNastavnik.brojTelefona" />
+                        <label class="text-black" for="brojTelefonaInput">Broj telefona</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="katedraInput" name="Katedra"
+                            [(ngModel)]="selektovaniNastavnik.katedra" />
+                        <label class="text-black" for="katedraInput">Katedra</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <select class="form-select" aria-label="Uloga select" id="ulogaInput"
+                            [(ngModel)]="selektovaniNastavnik.uloga">
+                            <option value="PROFESOR">
+                                Profesor
+                            </option>
+                            <option value="ASISTENT">
+                                Asistent
+                            </option>
+                            <option value="DEMONSTRATOR">
+                                Demonstrator
+                            </option>
+                        </select>
+                        <label class="text-black" for="ulogaInput">Uloga</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="izmeniNastavnika()">
+                        <i class="bi bi-person-check"></i> Sačuvaj</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="brisanjeModal" tabindex="-1" aria-labelledby="brisanjeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="brisanjeModalLabel">Brisanje nastavnika</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Da li ste sigurni da želite da obrišete nastavnika?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" (click)="obrisiNastavnika()"><i
+                            class="bi bi-person-x"></i> Potvrdi</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Odustani</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
