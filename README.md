@@ -4,8 +4,8 @@ Aplikacija simulira fakultetski sistem sa pojednostavljenim funkcionalnostima.
 
 ### Pokretanje aplikacije:
 
-- Backend: Pokrenuti EObrazovanjeApplication.java fajl
-- Frontend: Navigirati se u eObrazovanje-front folder i pokrenuti komandu: ng serve
+- Backend: Pokrenuti `EObrazovanjeApplication.java` fajl
+- Frontend: Navigirati se u eObrazovanje-front folder i izvrsiti komandu `ng serve`
 - Na pretrazivacu otvoriti sledecu adresu: http://localhost:4200/
 
 ### Prijava u aplikaciji:
